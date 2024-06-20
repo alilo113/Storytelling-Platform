@@ -3,7 +3,9 @@ const app = express();
 const port = 5000;
 const mongoose = require("mongoose")
 const user = require("./models/userSchema")
+const cors = require("cors")
 
+app.use(cors())
 app.use(express.json())
 
 mongoose.connect("mongodb://127.0.0.1:27017/usersDatabase", )

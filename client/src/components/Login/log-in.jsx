@@ -14,7 +14,7 @@ export function Login() {
                 <input type="password" name="password" className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-sky-500" />
             </div>
             <button className="w-full bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded-lg transition duration-200 mb-4">Log in</button>
-            <Link to="/sign-up" className="block text-center text-sky-700 hover:underline">I have an account</Link>
+            <Link to="/sign-up" className="block text-center text-sky-700 hover:underline">I don't have an account</Link>
         </div>
     );
 }
