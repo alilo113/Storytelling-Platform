@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export function Signup() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
-
+    const navigate = useNavigate(); // Use the useNavigate hook
 
     const handleSignup = async () => {
         try {
@@ -15,11 +15,12 @@ export function Signup() {
                 password,
                 email,
             });
-            console.log(response.data);
 
-            setEmail("")
-            setPassword("")
-            setUsername("")
+            setEmail("");
+            setPassword("");
+            setUsername("");
+
+            // Navigate to the home page after successful sign-up
         } catch (error) {
             console.error("Error signing up:", error);
         }

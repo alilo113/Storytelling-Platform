@@ -23,4 +23,19 @@ app.post("/api/users", async (req, res) => {
     }
 })
 
+app.post("/log-in", async (req, res) => {
+    try {
+        const {username, password} = req.body
+        const existUser = await user.findOne({userName: username, Password: password});
+
+        if(existUser){
+            res.status(200).send("log in successfuly")
+        }else{
+            res.status(401).send("Invalid username or password")
+        }
+    }catch (error){
+        console.log(error)
+    }
+})
+
 app.listen(port, console.log(`listent to port ${port}`))

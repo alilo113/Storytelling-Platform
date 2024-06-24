@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import profilePic from "../../assets/profile-circle-svgrepo-com.svg"; // Adjust the path accordingly
 
 export function Home() {
     return (
