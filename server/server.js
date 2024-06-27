@@ -8,7 +8,7 @@ const cors = require("cors")
 app.use(cors())
 app.use(express.json())
 
-mongoose.connect("mongodb://127.0.0.1:27017/usersDatabase", )
+mongoose.connect("mongodb://127.0.0.1:27017/usersDb", )
 .then(() => console.log("Database connected"))
 .catch((Error) => console.log({message: Error}))
 
@@ -28,10 +28,10 @@ app.post("/log-in", async (req, res) => {
         const {username, password} = req.body
         const existUser = await user.findOne({userName: username, Password: password});
 
-        if(existUser){
-            res.status(200).send("log in successfuly")
-        }else{
+        if(!existUser){
             res.status(401).send("Invalid username or password")
+        }else{
+            res.status(200).send("log in successfuly")
         }
     }catch (error){
         console.log(error)
