@@ -2,67 +2,45 @@ const express = require("express");
 const app = express();
 const port = 5000;
 const mongoose = require("mongoose");
-const User = require("./models/userSchema");
+const user = require("./models/userSchema");
+const crypto = require("crypto"); // Import crypto module for secret key generation
 const jwt = require("jsonwebtoken");
-const cors = require("cors");
-const dotenv = require('dotenv');
+const cors = require("cors")
 
-dotenv.config();
-
-app.use(cors());
+app.use(cors())
 app.use(express.json());
 
+// Replace with your actual MongoDB connection string
 mongoose.connect("mongodb://127.0.0.1:27017/usersDb")
-  .then(() => console.log("Database connected"))
-  .catch((error) => console.log({ message: error }));
+.then(() => console.log("Database connected"))
+.catch((error) => console.log("Database connection error:", error));
 
-// Middleware to authenticate token
-const auth = async (req, res, next) => {
-  try {
-    const token = req.header('Authorization').replace('Bearer ', '');
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findOne({ _id: decoded._id });
-
-    if (!user) {
-      throw new Error();
-    }
-
-    req.user = user;
-    next();
-  } catch (error) {
-    res.status(401).send('Please authenticate');
-  }
-};
-
-app.post("/api/users", async (req, res) => {
-  try {
-    const { username, email, password } = req.body;
-    const newUser = new User({ userName: username, password, email });
-    await newUser.save();
-    res.status(201).send("User created");
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-});
+// Generate a secure secret key (replace with your actual secret key)
+const secretKey = 'your_secure_secret_key_here';
 
 app.post("/log-in", async (req, res) => {
   try {
     const { username, password } = req.body;
-    const user = await User.findOne({ userName: username });
+    const existingUser = await user.findOne({ userName: username, Password: password });
 
-    if (!user || !await bcrypt.compare(password, user.password)) {
+    if (!existingUser) {
       return res.status(401).send("Invalid username or password");
     }
 
-    const token = user.generateAuthToken();
-    res.json({ token });
+    // Generate JWT token
+    const token = jwt.sign(
+      { userId: existingUser._id, username: existingUser.userName },
+      secretKey,
+      { expiresIn: '1h' }
+    );
+
+    res.status(200).json({ token }); // Send token to the client
   } catch (error) {
-    res.status(500).json({ message: 'Server error' });
+    console.log("Login error:", error);
+    res.status(500).json({ message: "Login failed" });
   }
 });
 
-app.get('/profile', auth, (req, res) => {
-  res.json({ username: req.user.userName, email: req.user.email });
+app.listen(port, () => {
+  console.log(`Server is running on http://localhost:${port}`);
 });
-
-app.listen(port, () => console.log(`Listening to port ${port}`));

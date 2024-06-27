@@ -19,7 +19,9 @@ export function Login() {
             });
 
             if (response.ok) {
-                // Navigate to home page or other route
+                const { token } = await response.json(); // Extract token from response
+                localStorage.setItem('token', token); // Store token in localStorage
+                console.log("Token stored in localStorage:", token);
                 window.location.href = "/"; // Example of direct navigation
             } else {
                 const errorMessage = await response.text();
@@ -43,7 +45,7 @@ export function Login() {
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                 />
-                <div>{error}</div>
+                <div className="text-red-700">{error}</div>
             </div>
             <div className="mb-6">
                 <label className="block text-gray-700 font-bold mb-2">Password:</label>
@@ -54,7 +56,7 @@ export function Login() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                 />
-                <div>{error}</div>
+                <div className="text-red-700">{error}</div>
             </div>
             <button type="submit" className="w-full bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded-lg transition duration-200 mb-4">Log in</button>
             <Link to="/sign-up" className="block text-center text-sky-700 hover:underline">I don't have an account</Link>
