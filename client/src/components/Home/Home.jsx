@@ -28,9 +28,12 @@ export function Home() {
         <h1 className="text-white font-bold text-xl">Story Telling Platform</h1>
         <div className="text-white">
           {username ? (
-            <Link to="/profile" className="mr-4 text-white">
+            <div>
+              <Link to="/profile" className="mr-4 text-white">
               {username}'s Profile
-            </Link>
+              </Link>
+              <button className='mr-2 bg-sky-700 p-2 rounded hover:bg-sky-600'>log out</button>
+            </div>
           ) : (
             <>
               <Link to="/log-in" className="mr-2 bg-sky-700 p-2 rounded hover:bg-sky-600">
