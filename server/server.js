@@ -19,7 +19,7 @@ app.post('/api/users', async (req, res) => {
   try {
     const { username, email, password } = req.body;
     // Perform data validation checks here if necessary
-    const newUser = new user({ Username: username, Email: email, Password: password });
+    const newUser = new user({ username: username, email: email, Password: password });
     console.log(newUser)
     const savedUser = await newUser.save();
     } catch (error) {
