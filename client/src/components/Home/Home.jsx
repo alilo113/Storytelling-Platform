@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export function Home() {
   const [username, setUsername] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Fetch and decode JWT token from local storage
@@ -22,6 +23,24 @@ export function Home() {
     }
   };
 
+  async function logOut() {
+    const res = await fetch("http://localhost:5000/log-out", {
+      method: "POST"
+    })
+
+    if(res.ok){
+      localStorage.removeItem('token');
+      navigate('/');
+    }else{
+      console.log("not able to log out")
+    }
+    // Optionally, you can call your backend logout endpoint here
+    // await fetch('http://localhost:5000/log-out', { method: 'POST' });
+
+    // Clear the token from local storage
+    // Navigate to the login page
+  }
+  
   return (
     <div className="bg-gray-100 min-h-screen">
       <header className="flex bg-gray-800 p-4 justify-between items-center" id="header">
@@ -30,9 +49,9 @@ export function Home() {
           {username ? (
             <div>
               <Link to="/profile" className="mr-4 text-white">
-              {username}'s Profile
+                {username}'s Profile
               </Link>
-              <button className='mr-2 bg-sky-700 p-2 rounded hover:bg-sky-600'>log out</button>
+              <button className='mr-2 bg-sky-700 p-2 rounded hover:bg-sky-600' onClick={logOut}>Log out</button>
             </div>
           ) : (
             <>
